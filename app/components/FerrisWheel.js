@@ -16,12 +16,12 @@ export default function FerrisWheel({
   const outerRadius = 390;
   const innerRadius = 295;
 
-  // 12 spokes for 12 cabins (30 deg intervals)
+  // 10 spokes for 10 cabins (36 deg intervals)
   const r4 = (n) => Math.round(n * 10000) / 10000;
 
   const spokes = useMemo(() => {
-    return Array.from({ length: 12 }).map((_, i) => {
-      const angleDeg = i * 30; // 0 is top (12 o'clock), 180 is bottom (6 o'clock)
+    return Array.from({ length: 10 }).map((_, i) => {
+      const angleDeg = i * 36; // 0 is top (12 o'clock), 180 is bottom (6 o'clock)
       const rad = (angleDeg * Math.PI) / 180;
       const xOuter = r4(cx + outerRadius * Math.sin(rad));
       const yOuter = r4(cy - outerRadius * Math.cos(rad));
@@ -34,7 +34,7 @@ export default function FerrisWheel({
   // Structural trusses between concentric rims
   const trusses = useMemo(() => {
     return spokes.map((spoke, i) => {
-      const nextSpoke = spokes[(i + 1) % 12];
+      const nextSpoke = spokes[(i + 1) % 10];
       return {
         id: i,
         x1: spoke.xInner,
@@ -227,9 +227,9 @@ export default function FerrisWheel({
             opacity="0.9"
           />
 
-          {/* 24 Sparkling Festival LED Bulbs along Outer Rim */}
-          {Array.from({ length: 24 }).map((_, i) => {
-            const a = (i * 15 * Math.PI) / 180;
+          {/* 20 Sparkling Festival LED Bulbs along Outer Rim (every 18 deg) */}
+          {Array.from({ length: 20 }).map((_, i) => {
+            const a = (i * 18 * Math.PI) / 180;
             const bx = r4(cx + (outerRadius + 3) * Math.sin(a));
             const by = r4(cy - (outerRadius + 3) * Math.cos(a));
             return (
@@ -269,7 +269,7 @@ export default function FerrisWheel({
             />
           ))}
 
-          {/* 12 Tubular Spokes */}
+          {/* 10 Tubular Spokes */}
           {spokes.map((spoke) => (
             <g key={`spoke-${spoke.index}`}>
               <line
@@ -301,7 +301,7 @@ export default function FerrisWheel({
             </g>
           ))}
 
-          {/* 12 GIGANTIC CABINS (136px x 118px) - COUNTER-ROTATED TO STAY UPRIGHT */}
+          {/* 10 GIGANTIC CABINS (144px x 124px) - COUNTER-ROTATED TO STAY UPRIGHT */}
           {spokes.map((spoke) => {
             const prize = prizes[spoke.index] || {
               name: `Prize ${spoke.index + 1}`,

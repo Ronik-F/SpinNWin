@@ -3,16 +3,21 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { X, Zap, RotateCcw, Lock, Unlock, AlertTriangle, CheckCircle2, SlidersHorizontal } from "lucide-react";
 import { getNumericPrice } from "../utils/weightedRandom";
+import { GRAND_PRIZE_IDS } from "../data/prizes.js";
 
 /**
  * Computes the inverse-price hierarchy weights (same logic as weightedRandom.js)
  * Returns an array of percentages [0..100] that sum to 100.
+ * Grand prizes (goat, vivobook) are hardcoded strictly to 0%.
  */
 function computeSmartHierarchy(prizes) {
   const prices = prizes.map((p) => getNumericPrice(p));
-  const rawWeights = prices.map((p) => 1 / p);
+  const rawWeights = prizes.map((p, idx) => {
+    if (GRAND_PRIZE_IDS.includes(p.id)) return 0;
+    return 1 / prices[idx];
+  });
   const total = rawWeights.reduce((s, w) => s + w, 0);
-  return rawWeights.map((w) => Math.round((w / total) * 10000) / 100); // 2 decimal places
+  return rawWeights.map((w) => (total === 0 || w === 0 ? 0 : Math.round((w / total) * 10000) / 100)); // 2 decimal places
 }
 
 /**
@@ -144,7 +149,8 @@ export default function AdminOddsPanel({ isOpen, onClose, prizes, onOddsChange }
           {sortedByPrice.map((prize) => {
             const oi = prize._origIdx;
             const pct = displayOdds[oi] ?? 0;
-            const isZero = pct < 0.01;
+            const isGrandPrize = GRAND_PRIZE_IDS.includes(prize.id);
+            const isZero = isGrandPrize || pct < 0.01;
 
             // Colour band based on odds
             const barColor = isZero
@@ -180,22 +186,28 @@ export default function AdminOddsPanel({ isOpen, onClose, prizes, onOddsChange }
                       <span className="text-white text-xs font-bold truncate">{prize.name}</span>
                       <span className="text-[10px] px-1.5 py-0.5 rounded-full font-mono font-bold shrink-0"
                             style={{ background: `${barColor}22`, color: barColor, border: `1px solid ${barColor}44` }}>
-                        {isZero ? "EXCLUDED" : `${pct}%`}
+                        {isGrandPrize ? "0% (LOCKED)" : isZero ? "EXCLUDED" : `${pct}%`}
                       </span>
                     </div>
                     <span className="text-white/30 text-[10px] font-medium">
-                      {prize.value} · {prize.brand}
+                      {prize.value || (prize.price ? `Rs. ${prize.price.toLocaleString()}` : "")} · {prize.brand}
                     </span>
                   </div>
 
                   {/* Lock / 0 toggle */}
-                  <button
-                    onClick={() => handleSliderChange(oi, isZero ? (computeSmartHierarchy(prizes)[oi]) : 0)}
-                    title={isZero ? "Re-include prize" : "Exclude prize (set to 0%)"}
-                    className="w-7 h-7 rounded-lg flex items-center justify-center text-white/20 hover:text-white/60 hover:bg-white/8 transition-all cursor-pointer shrink-0"
-                  >
-                    {isZero ? <Unlock size={13} /> : <Lock size={13} />}
-                  </button>
+                  {!isGrandPrize ? (
+                    <button
+                      onClick={() => handleSliderChange(oi, isZero ? (computeSmartHierarchy(prizes)[oi]) : 0)}
+                      title={isZero ? "Re-include prize" : "Exclude prize (set to 0%)"}
+                      className="w-7 h-7 rounded-lg flex items-center justify-center text-white/20 hover:text-white/60 hover:bg-white/8 transition-all cursor-pointer shrink-0"
+                    >
+                      {isZero ? <Unlock size={13} /> : <Lock size={13} />}
+                    </button>
+                  ) : (
+                    <div className="w-7 h-7 rounded-lg flex items-center justify-center text-amber-400/40 shrink-0" title="Grand Prize hardcoded to 0%">
+                      <Lock size={13} />
+                    </div>
+                  )}
                 </div>
 
                 {/* Slider */}
@@ -205,11 +217,14 @@ export default function AdminOddsPanel({ isOpen, onClose, prizes, onOddsChange }
                     min={0}
                     max={100}
                     step={0.5}
-                    value={rawValues[oi] ?? 0}
-                    onChange={(e) => handleSliderChange(oi, e.target.value)}
-                    className="w-full h-1.5 rounded-full appearance-none cursor-pointer outline-none"
+                    disabled={isGrandPrize}
+                    value={isGrandPrize ? 0 : (rawValues[oi] ?? 0)}
+                    onChange={(e) => !isGrandPrize && handleSliderChange(oi, e.target.value)}
+                    className={`w-full h-1.5 rounded-full appearance-none outline-none ${isGrandPrize ? "cursor-not-allowed opacity-30" : "cursor-pointer"}`}
                     style={{
-                      background: `linear-gradient(to right, ${barColor} 0%, ${barColor} ${rawValues[oi] ?? 0}%, rgba(255,255,255,0.08) ${rawValues[oi] ?? 0}%, rgba(255,255,255,0.08) 100%)`,
+                      background: isGrandPrize
+                        ? "rgba(255,255,255,0.08)"
+                        : `linear-gradient(to right, ${barColor} 0%, ${barColor} ${rawValues[oi] ?? 0}%, rgba(255,255,255,0.08) ${rawValues[oi] ?? 0}%, rgba(255,255,255,0.08) 100%)`,
                       accentColor: barColor,
                     }}
                   />

@@ -74,10 +74,10 @@ export default function PrizePoolCatalogModal({
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <h2 className="text-slate-900 font-black text-base sm:text-lg tracking-tight leading-tight truncate">
-                  सबै १२ उपहार र मूल्य
+                  सबै १० उपहार र मूल्य
                 </h2>
                 <span className="text-[11px] font-black px-2 py-0.5 rounded-full bg-amber-400/30 text-amber-900 border border-amber-400/50 hidden sm:inline">
-                  12 Genuine Products
+                  {prizes.length} Genuine Products
                 </span>
               </div>
               <p className="text-amber-800/70 text-[11px] font-bold mt-0.5 truncate">

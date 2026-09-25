@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import Link from "next/link";
 import FerrisWheel from "./components/FerrisWheel";
 import SceneryBackdrop from "./components/SceneryBackdrop";
 import FestiveBanner from "./components/FestiveBanner";
@@ -9,7 +10,7 @@ import PrizePoolCatalogModal from "./components/PrizePoolCatalogModal";
 import { INITIAL_PRIZES } from "./data/prizes";
 import { playTickSound, playWhooshSound, playWinFanfare } from "./utils/audio";
 import { pickWeightedWinnerIndex } from "./utils/weightedRandom";
-import { Shuffle, Play, Gift } from "lucide-react";
+import { Shuffle, Play, Gift, Sparkles } from "lucide-react";
 
 export default function Home() {
   const [prizes, setPrizes] = useState(INITIAL_PRIZES);
@@ -61,9 +62,9 @@ export default function Home() {
     // Higher price models (Grand Prize) have significantly lower odds.
     const targetPrizeIndex = pickWeightedWinnerIndex(prizes, 1.0);
 
-    // Spoke i starts at (i * 30) deg from top (12 o'clock).
+    // Spoke i starts at (i * 36) deg from top (12 o'clock).
     // Bottom winner pedestal is at 180 degrees (6 o'clock).
-    const desiredRemainder = ((180 - targetPrizeIndex * 30) % 360 + 360) % 360;
+    const desiredRemainder = ((180 - targetPrizeIndex * 36) % 360 + 360) % 360;
 
     const startRot = currentRotationRef.current;
     const currentRem = ((startRot % 360) + 360) % 360;
@@ -101,7 +102,7 @@ export default function Home() {
       }
     };
 
-    lastTickIndexRef.current = Math.floor(startRot / 30);
+    lastTickIndexRef.current = Math.floor(startRot / 36);
 
     const animate = (currentTime) => {
       const elapsed = currentTime - startTime;
@@ -112,8 +113,8 @@ export default function Home() {
       setRotation(newRot);
       currentRotationRef.current = newRot;
 
-      // Spoke click sound on crossing each 30 deg sector
-      const currentTickIndex = Math.floor(newRot / 30);
+      // Spoke click sound on crossing each 36 deg sector
+      const currentTickIndex = Math.floor(newRot / 36);
       if (currentTickIndex !== lastTickIndexRef.current) {
         lastTickIndexRef.current = currentTickIndex;
         const speed = u < a ? u / a : u > b ? (1 - u) / (1 - b) : 1;
@@ -165,6 +166,19 @@ export default function Home() {
       {/* Mountain & Kite Scenery Backdrop */}
       <SceneryBackdrop />
 
+      {/* Top Right Floating CashPatti Link Button */}
+      <div className="absolute top-3 right-3 sm:top-4 sm:right-6 z-40">
+        <Link
+          href="/cashpatti"
+          className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-gradient-to-r from-purple-800 via-indigo-700 to-amber-600 hover:from-purple-700 hover:to-amber-500 text-white font-black text-xs sm:text-sm tracking-wide border-2 border-white shadow-[0_8px_24px_rgba(124,58,237,0.45)] ring-2 ring-amber-400/80 flex items-center gap-2 transition-all hover:scale-105 active:scale-95 group no-underline relative overflow-hidden backdrop-blur-sm"
+          title="Play CashPatti Teen Patti Game"
+        >
+          <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 pointer-events-none" />
+          <Sparkles className="w-4 h-4 text-amber-300 animate-pulse shrink-0" />
+          <span>🃏 CashPatti (क्यास पत्ती)</span>
+        </Link>
+      </div>
+
       {/* Main Screen Layout: Wheel and Right Hero Section brought close together */}
       <main className="relative z-10 flex-1 min-h-0 w-full max-w-[1560px] mx-auto flex flex-row items-center justify-center gap-4 lg:gap-8 xl:gap-10 px-2 sm:px-4 md:px-6 overflow-hidden">
         {/* Left Side: Massive Ferris Wheel (Expanded to fill space generously) */}
@@ -213,15 +227,15 @@ export default function Home() {
                 <span>Shuffle</span>
               </button>
 
-              {/* All 12 Products & Prices Modal Button */}
+              {/* All 10 Products & Prices Modal Button */}
               <button
                 onClick={() => setIsCatalogOpen(true)}
                 disabled={isSpinning}
                 className="px-4 py-2 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-900 text-xs font-black border-2 border-amber-300 shadow-md transition-all active:scale-95 disabled:opacity-40 flex items-center gap-1.5 cursor-pointer hover:shadow-lg"
-                title="View all 12 products, prices, and genuine gifts"
+                title="View all 10 products, prices, and genuine gifts"
               >
                 <Gift className="w-3.5 h-3.5 text-red-600" />
-                <span>सबै १२ उपहार र मूल्य</span>
+                <span>सबै १० उपहार र मूल्य</span>
               </button>
             </div>
           </div>

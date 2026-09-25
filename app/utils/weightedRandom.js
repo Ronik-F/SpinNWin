@@ -10,7 +10,11 @@
  * - Price of prize i = P_i
  * - Raw Weight W_i = 1 / (P_i ^ exponent)
  * - Probability = (W_i / sum(W_all)) * 100%
+ *
+ * GRAND PRIZE BLACKLIST: Items in GRAND_PRIZE_IDS are HARDCODED to 0% and
+ * can never appear as a wheel outcome, regardless of any other setting.
  */
+import { GRAND_PRIZE_IDS } from "../data/prizes.js";
 
 /**
  * Extracts a numeric price from a prize object (either from `price` number or parsed from `value` string)
@@ -43,17 +47,22 @@ export function calculatePrizeOdds(prizes, exponent = 1.0) {
   }));
 
   // Calculate inverse price weights: lower price => higher weight
-  const rawWeights = withPrices.map((p) => Math.pow(1 / p.numericPrice, exponent));
+  // HARDCODED: Grand prizes (goat, laptop) have 0 weight and 0% odds
+  const rawWeights = withPrices.map((p) => {
+    if (GRAND_PRIZE_IDS.includes(p.id)) return 0;
+    return Math.pow(1 / p.numericPrice, exponent);
+  });
   const totalWeight = rawWeights.reduce((sum, w) => sum + w, 0);
 
   return withPrices.map((prize, idx) => {
-    const rawOdds = (rawWeights[idx] / totalWeight) * 100;
+    const isBlacklisted = GRAND_PRIZE_IDS.includes(prize.id);
+    const rawOdds = isBlacklisted || totalWeight === 0 ? 0 : (rawWeights[idx] / totalWeight) * 100;
     const probabilityPercent = Number(rawOdds.toFixed(2));
 
     // Dynamic Tiering based on price ranking
     let tier = "Standard Prize";
-    if (prize.numericPrice >= 50000) {
-      tier = "🏆 Grand Jackpot (Rare)";
+    if (isBlacklisted) {
+      tier = "🎪 Display Only (0% odds)";
     } else if (prize.numericPrice >= 10000) {
       tier = "💎 Ultra Premium";
     } else if (prize.numericPrice >= 5000) {
@@ -64,7 +73,7 @@ export function calculatePrizeOdds(prizes, exponent = 1.0) {
 
     return {
       ...prize,
-      weight: rawWeights[idx],
+      weight: isBlacklisted ? 0 : rawWeights[idx],
       probabilityPercent,
       tier,
     };
@@ -80,22 +89,30 @@ export function calculatePrizeOdds(prizes, exponent = 1.0) {
 export function pickWeightedWinnerIndex(prizes, exponent = 1.0) {
   if (!prizes || prizes.length === 0) return 0;
 
-  const enriched = calculatePrizeOdds(prizes, exponent);
-  const totalWeight = enriched.reduce((sum, p) => sum + p.weight, 0);
+  // HARDCODED SAFETY: zero-out grand prize weights before rolling
+  const enriched = calculatePrizeOdds(prizes, exponent).map((p) => ({
+    ...p,
+    weight: GRAND_PRIZE_IDS.includes(p.id) ? 0 : p.weight,
+  }));
+
+  const eligibleEnriched = enriched.filter((p) => p.weight > 0 && !GRAND_PRIZE_IDS.includes(p.id));
+  if (eligibleEnriched.length === 0) return 0;
+
+  const totalWeight = eligibleEnriched.reduce((sum, p) => sum + p.weight, 0);
 
   // Roll a random value between 0 and totalWeight
   const randomRoll = Math.random() * totalWeight;
 
   let cumulativeWeight = 0;
-  for (let i = 0; i < enriched.length; i++) {
-    cumulativeWeight += enriched[i].weight;
+  for (let i = 0; i < eligibleEnriched.length; i++) {
+    cumulativeWeight += eligibleEnriched[i].weight;
     if (randomRoll <= cumulativeWeight) {
-      return enriched[i].originalIndex;
+      return eligibleEnriched[i].originalIndex;
     }
   }
 
-  // Fallback to last item
-  return enriched.length - 1;
+  // Fallback to last eligible item
+  return eligibleEnriched[eligibleEnriched.length - 1].originalIndex;
 }
 
 /**
@@ -111,9 +128,12 @@ export function pickWeightedWinnerIndexWithCustomOdds(prizes, customOdds, expone
     return pickWeightedWinnerIndex(prizes, exponent);
   }
 
-  // Build (index, weight) pairs — exclude zeroed-out prizes
+  // Build (index, weight) pairs — exclude zeroed-out prizes AND grand prize blacklist
   const candidates = prizes
-    .map((_, i) => ({ index: i, weight: Math.max(0, customOdds[i] ?? 0) }))
+    .map((p, i) => ({
+      index: i,
+      weight: GRAND_PRIZE_IDS.includes(p.id) ? 0 : Math.max(0, customOdds[i] ?? 0),
+    }))
     .filter((c) => c.weight > 0);
 
   if (candidates.length === 0) return 0;
