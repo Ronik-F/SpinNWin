@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+    <defs>
+      <linearGradient id="swOled" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#0284c7"/>
+        <stop offset="100%" stop-color="#030712"/>
+      </linearGradient>
+    </defs>
+    <!-- Straps Top & Bottom -->
+    <path d="M 60 10 L 100 10 L 96 44 L 64 44 Z" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+    <path d="M 64 116 L 96 116 L 100 150 L 60 150 Z" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+    <!-- Watch Case Curved Aluminum -->
+    <rect x="42" y="36" width="76" height="88" rx="24" fill="#0f172a" stroke="#06b6d4" stroke-width="4"/>
+    <!-- Digital Crown -->
+    <rect x="118" y="54" width="6" height="18" rx="3" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5"/>
+    <!-- Side Button -->
+    <rect x="118" y="82" width="4" height="14" rx="2" fill="#64748b"/>
+    <!-- Glass Display -->
+    <rect x="48" y="42" width="64" height="76" rx="18" fill="url(#swOled)"/>
+    <!-- Digital Clock Interface -->
+    <text x="80" y="74" text-anchor="middle" fill="#ffffff" font-size="20" font-weight="900" font-family="system-ui">10:08</text>
+    <!-- Activity Rings -->
+    <circle cx="80" cy="94" r="13" fill="none" stroke="#1e293b" stroke-width="3.5"/>
+    <circle cx="80" cy="94" r="13" fill="none" stroke="#ef4444" stroke-width="3.5" stroke-dasharray="60 90"/>
+    <circle cx="80" cy="94" r="9" fill="none" stroke="#10b981" stroke-width="3" stroke-dasharray="40 60"/>
+  </svg>

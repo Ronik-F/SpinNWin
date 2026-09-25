@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+    <!-- Open Charging Case Base -->
+    <rect x="36" y="58" width="88" height="66" rx="28" fill="#1e293b" stroke="#a855f7" stroke-width="4"/>
+    <!-- Lid Arc -->
+    <path d="M 40 58 C 40 28, 120 28, 120 58" fill="none" stroke="#7e22ce" stroke-width="3.5"/>
+    <!-- Earbuds resting in magnetic dock -->
+    <circle cx="60" cy="64" r="12" fill="#a855f7" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="100" cy="64" r="12" fill="#a855f7" stroke="#ffffff" stroke-width="2"/>
+    <rect x="57" y="70" width="6" height="22" rx="3" fill="#ffffff"/>
+    <rect x="97" y="70" width="6" height="22" rx="3" fill="#ffffff"/>
+    <!-- Battery Level LED -->
+    <circle cx="80" cy="96" r="3" fill="#10b981"/>
+  </svg>

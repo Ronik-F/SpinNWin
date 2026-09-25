@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" width="200" height="160">
+    <defs>
+      <linearGradient id="laptopScreen" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#0284c7"/>
+        <stop offset="50%" stop-color="#2563eb"/>
+        <stop offset="100%" stop-color="#7c3aed"/>
+      </linearGradient>
+    </defs>
+    <!-- Angled Display Lid -->
+    <polygon points="40,24 160,24 174,104 26,104" fill="#0f172a" stroke="#334155" stroke-width="3"/>
+    <polygon points="46,30 154,30 167,98 33,98" fill="url(#laptopScreen)"/>
+    <!-- Glowing Brand Logo on Screen -->
+    <polygon points="100,52 110,68 90,68" fill="#38bdf8" opacity="0.8"/>
+    <!-- Base Keyboard Chassis -->
+    <polygon points="12,108 188,108 174,136 26,136" fill="#090d16" stroke="#475569" stroke-width="2.5"/>
+    <polygon points="30,111 170,111 160,125 40,125" fill="#38bdf8" opacity="0.6"/>
+    <!-- Trackpad -->
+    <polygon points="85,127 115,127 112,133 88,133" fill="#334155"/>
+  </svg>

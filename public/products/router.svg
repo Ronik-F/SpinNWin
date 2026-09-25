@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+    <!-- 4 High Gain Antennas -->
+    <line x1="28" y1="18" x2="42" y2="76" stroke="#3b82f6" stroke-width="5" stroke-linecap="round"/>
+    <line x1="62" y1="12" x2="68" y2="76" stroke="#3b82f6" stroke-width="5" stroke-linecap="round"/>
+    <line x1="98" y1="12" x2="92" y2="76" stroke="#3b82f6" stroke-width="5" stroke-linecap="round"/>
+    <line x1="132" y1="18" x2="118" y2="76" stroke="#3b82f6" stroke-width="5" stroke-linecap="round"/>
+    <!-- Futuristic Router Body -->
+    <polygon points="18,88 42,74 118,74 142,88 134,116 26,116" fill="#1e293b" stroke="#2563eb" stroke-width="3.5"/>
+    <!-- Status LEDs -->
+    <circle cx="56" cy="94" r="3" fill="#10b981"/>
+    <circle cx="68" cy="94" r="3" fill="#10b981"/>
+    <circle cx="80" cy="94" r="3" fill="#06b6d4"/>
+    <circle cx="92" cy="94" r="3" fill="#10b981"/>
+    <circle cx="104" cy="94" r="3" fill="#10b981"/>
+    <!-- Wi-Fi 6 Text -->
+    <text x="80" y="108" text-anchor="middle" fill="#60a5fa" font-size="10" font-weight="900">Wi-Fi 6 AX</text>
+  </svg>

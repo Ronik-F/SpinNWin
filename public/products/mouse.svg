@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+    <defs>
+      <linearGradient id="mouseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#475569"/>
+        <stop offset="40%" stop-color="#1e293b"/>
+        <stop offset="100%" stop-color="#090d16"/>
+      </linearGradient>
+    </defs>
+    <!-- Ergonomic Gaming Mouse -->
+    <path d="M 52 38 C 52 20, 108 20, 108 38 L 114 102 C 114 130, 46 130, 46 102 Z" fill="url(#mouseGrad)" stroke="#334155" stroke-width="3"/>
+    <!-- Thumb Rest Left -->
+    <path d="M 50 78 C 38 88, 38 112, 48 118" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+    <!-- Split Seam -->
+    <line x1="80" y1="22" x2="80" y2="64" stroke="#10b981" stroke-width="2.5"/>
+    <!-- Scroll Wheel -->
+    <rect x="74" y="34" width="12" height="22" rx="6" fill="#10b981" stroke="#047857" stroke-width="1.5"/>
+    <line x1="74" y1="42" x2="86" y2="42" stroke="#ffffff" stroke-width="1.5"/>
+    <line x1="74" y1="48" x2="86" y2="48" stroke="#ffffff" stroke-width="1.5"/>
+    <!-- DPI Switch Button -->
+    <rect x="76" y="62" width="8" height="8" rx="2" fill="#64748b"/>
+    <!-- RGB Neon Accent Ribbons -->
+    <path d="M 56 82 Q 80 96 104 82" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+    <!-- Pulsing Gaming Emblem -->
+    <polygon points="80,102 87,112 73,112" fill="#10b981"/>
+    <polygon points="80,118 87,108 73,108" fill="#10b981" opacity="0.6"/>
+  </svg>
