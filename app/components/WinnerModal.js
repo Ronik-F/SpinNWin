@@ -87,11 +87,7 @@ export default function WinnerModal({ prize, isOpen, onClose, onSpinAgain }) {
     }
   };
 
-  const displayName =
-    prize.fullName ||
-    (prize.brand && !prize.name.toLowerCase().startsWith(prize.brand.toLowerCase())
-      ? `${prize.brand} ${prize.name}`
-      : prize.name);
+  const displayName = prize.name || prize.fullName || "Prize";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-md animate-in fade-in duration-200 select-none">
@@ -165,10 +161,10 @@ export default function WinnerModal({ prize, isOpen, onClose, onSpinAgain }) {
               </g>
             </svg>
 
-            {/* Floating Badge in Top Corner */}
+            {/* Floating Badge / Tag in Top Corner */}
             <div className="absolute top-2.5 right-2.5 z-20">
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gradient-to-r from-red-600 to-amber-500 text-white text-[10px] font-black tracking-wider uppercase shadow-md shadow-red-500/30">
-                {prize.badge || "🏆 WINNER"}
+                {prize.badge || prize.tag || "🏆 WINNER"}
               </span>
             </div>
 
@@ -200,11 +196,13 @@ export default function WinnerModal({ prize, isOpen, onClose, onSpinAgain }) {
           <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-tight mt-1">
             {displayName}
           </h3>
-          <p className="text-sm font-black text-red-600 mt-0.5 tracking-wide">
-            {prize.nepaliName}
-          </p>
+          {prize.nepaliName && (
+            <p className="text-sm font-black text-red-600 mt-0.5 tracking-wide">
+              {prize.nepaliName}
+            </p>
+          )}
           <p className="text-xs text-slate-500 max-w-xs mx-auto mt-1 leading-relaxed line-clamp-2">
-            {prize.description}
+            {prize.description || prize.desc || "Genuine Prize from Alam Tech"}
           </p>
 
           {/* Golden Prize Value Plaque */}

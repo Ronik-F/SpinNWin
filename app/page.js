@@ -166,9 +166,9 @@ export default function Home() {
       <SceneryBackdrop />
 
       {/* Main Screen Layout: Wheel and Right Hero Section brought close together */}
-      <main className="relative z-10 flex-1 min-h-0 w-full max-w-[1420px] mx-auto flex flex-row items-center justify-center gap-6 lg:gap-10 xl:gap-14 px-3 sm:px-6 overflow-hidden">
-        {/* Left Side: Massive Ferris Wheel */}
-        <div className="flex-1 max-w-[860px] h-full flex items-center justify-center min-h-0 relative">
+      <main className="relative z-10 flex-1 min-h-0 w-full max-w-[1560px] mx-auto flex flex-row items-center justify-center gap-4 lg:gap-8 xl:gap-10 px-2 sm:px-4 md:px-6 overflow-hidden">
+        {/* Left Side: Massive Ferris Wheel (Expanded to fill space generously) */}
+        <div className="flex-[1.4] max-w-[1020px] w-full h-full flex items-center justify-center min-h-0 relative">
           <FerrisWheel
             prizes={prizes}
             rotation={rotation}
@@ -180,12 +180,12 @@ export default function Home() {
         </div>
 
         {/* Right Side: 3D Festive Nepali Typography, Linge Ping, Artwork, and Spin Action Controls */}
-        <div className="w-[360px] sm:w-[390px] lg:w-[420px] xl:w-[440px] shrink-0 h-full flex flex-col items-center justify-center text-center px-1 min-h-0 gap-3 relative">
+        <div className="w-[340px] sm:w-[370px] lg:w-[400px] shrink-0 h-full flex flex-col items-center justify-center text-center px-1 min-h-0 gap-2.5 relative">
           {/* Authentic 3D Festive Title & Linge Ping Hero Art */}
           <FestiveBanner />
 
           {/* Catchy Spin Actions */}
-          <div className="w-full flex flex-col items-center gap-2.5 mt-1 z-20">
+          <div className="w-full flex flex-col items-center gap-2 mt-0.5 z-20">
             {/* Big Primary Spin Button with 3D Gold Ring */}
             <button
               onClick={handleSpin}
@@ -218,7 +218,7 @@ export default function Home() {
                 onClick={() => setIsCatalogOpen(true)}
                 disabled={isSpinning}
                 className="px-4 py-2 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-900 text-xs font-black border-2 border-amber-300 shadow-md transition-all active:scale-95 disabled:opacity-40 flex items-center gap-1.5 cursor-pointer hover:shadow-lg"
-                title="View all 12 products, prices, and hierarchy"
+                title="View all 12 products, prices, and genuine gifts"
               >
                 <Gift className="w-3.5 h-3.5 text-red-600" />
                 <span>सबै १२ उपहार र मूल्य</span>
@@ -236,11 +236,12 @@ export default function Home() {
         onSpinAgain={handleSpin}
       />
 
-      {/* All 12 Prizes & Prices Catalog Modal (Public View - no admin controls) */}
+      {/* All 12 Prizes & Prices Catalog Modal (Public View - NO odds visible) */}
       <PrizePoolCatalogModal
         isOpen={isCatalogOpen}
         onClose={() => setIsCatalogOpen(false)}
         prizes={prizes}
+        isAdmin={false}
       />
     </div>
   );

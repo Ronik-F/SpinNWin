@@ -133,73 +133,96 @@ export default function LingePing({ className = "", animated = true }) {
         className={animated ? "animate-ping-swing" : ""}
         style={{ transformOrigin: "250px 145px" }}
       >
-        {/* Hemp Swing Ropes (बाक्लो बाबियोको डोरी) */}
+        {/* Dual Hemp Swing Ropes (बाक्लो बाबियोको डोरी) hanging from apex pivot */}
         <line
-          x1="248"
+          x1="247"
           y1="148"
-          x2="108"
-          y2="378"
+          x2="245"
+          y2="402"
           stroke="#0f172a"
-          strokeWidth="3.5"
+          strokeWidth="3.2"
           strokeLinecap="round"
         />
         <line
-          x1="252"
+          x1="253"
           y1="148"
-          x2="128"
-          y2="368"
+          x2="255"
+          y2="402"
           stroke="#0f172a"
-          strokeWidth="3.5"
+          strokeWidth="3.2"
           strokeLinecap="round"
         />
 
-        {/* Rope Texture / Twist Effect */}
+        {/* Golden Hemp Rope Texture Highlights */}
         <line
-          x1="248"
+          x1="247"
           y1="148"
-          x2="108"
-          y2="378"
+          x2="245"
+          y2="402"
           stroke="#f59e0b"
           strokeWidth="1.2"
           strokeDasharray="4 4"
-          opacity="0.5"
+          opacity="0.6"
+        />
+        <line
+          x1="253"
+          y1="148"
+          x2="255"
+          y2="402"
+          stroke="#f59e0b"
+          strokeWidth="1.2"
+          strokeDasharray="4 4"
+          opacity="0.6"
         />
 
-        {/* Wooden Seat (पिर्का) */}
-        <polygon points="98,382 134,366 138,374 102,390" fill="#78350f" stroke="#0f172a" strokeWidth="2" />
+        {/* Traditional Wooden Swing Seat (काठको पिर्का) */}
+        <rect
+          x="234"
+          y="400"
+          width="32"
+          height="7"
+          rx="2"
+          fill="#78350f"
+          stroke="#0f172a"
+          strokeWidth="1.8"
+        />
 
-        {/* Person Flying High on the Swing (पिङमा मच्चिंदै रमाएको मानिस) */}
+        {/* Joyous Swinger Flying High on the Linge Ping (पिङमा मच्चिएको नेपाली) */}
         <g fill="#0f172a">
+          {/* Traditional Nepali Dhaka Topi (ढाका टोपी) */}
+          <polygon points="246,346 254,346 253,341 247,342" fill="#dc2626" />
+          <polygon points="247,342 253,341 251,338" fill="#1e3a8a" />
+
           {/* Head */}
-          <circle cx="114" cy="346" r="10" />
+          <circle cx="250" cy="353" r="8" />
 
-          {/* Torso leaning back in flight */}
-          <path d="M 110 354 Q 106 368 116 376 L 102 384 Q 94 366 102 354 Z" />
+          {/* Torso sitting on the swing seat */}
+          <path d="M 245 361 Q 242 380 244 400 L 256 400 Q 258 380 255 361 Z" />
 
-          {/* Left Arm holding front rope */}
+          {/* Left Arm holding left rope firmly */}
           <path
-            d="M 108 358 Q 98 364 108 376"
+            d="M 246 366 Q 240 374 245 382"
             stroke="#0f172a"
-            strokeWidth="5"
+            strokeWidth="4"
             strokeLinecap="round"
             fill="none"
           />
 
-          {/* Right Arm holding rear rope */}
+          {/* Right Arm holding right rope firmly */}
           <path
-            d="M 116 358 Q 124 358 128 368"
+            d="M 254 366 Q 260 374 255 382"
             stroke="#0f172a"
-            strokeWidth="5"
+            strokeWidth="4"
             strokeLinecap="round"
             fill="none"
           />
 
-          {/* Legs pointing forward high into the breeze */}
+          {/* Legs soaring forward into the festival breeze */}
           <path
-            d="M 102 384 Q 85 392 72 388 Q 66 384 70 380 Q 82 382 96 378 Z"
+            d="M 244 398 Q 237 410 231 416 Q 227 413 234 406 Q 240 401 246 398 Z"
           />
           <path
-            d="M 106 386 Q 90 398 78 396 Q 74 392 78 388 Q 88 389 100 380 Z"
+            d="M 249 398 Q 242 414 236 422 Q 232 419 238 411 Q 245 403 253 398 Z"
           />
         </g>
       </g>

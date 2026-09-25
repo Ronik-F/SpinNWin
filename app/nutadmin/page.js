@@ -169,9 +169,9 @@ export default function NutAdminPage() {
       <SceneryBackdrop />
 
       {/* Main Screen Layout: Wheel and Right Hero Section brought close together */}
-      <main className="relative z-10 flex-1 min-h-0 w-full max-w-[1420px] mx-auto flex flex-row items-center justify-center gap-6 lg:gap-10 xl:gap-14 px-3 sm:px-6 overflow-hidden">
-        {/* Left Side: Massive Ferris Wheel */}
-        <div className="flex-1 max-w-[860px] h-full flex items-center justify-center min-h-0 relative">
+      <main className="relative z-10 flex-1 min-h-0 w-full max-w-[1560px] mx-auto flex flex-row items-center justify-center gap-4 lg:gap-8 xl:gap-10 px-2 sm:px-4 md:px-6 overflow-hidden">
+        {/* Left Side: Massive Ferris Wheel (Expanded to fill space generously) */}
+        <div className="flex-[1.4] max-w-[1020px] w-full h-full flex items-center justify-center min-h-0 relative">
           <FerrisWheel
             prizes={prizes}
             rotation={rotation}
@@ -183,12 +183,12 @@ export default function NutAdminPage() {
         </div>
 
         {/* Right Side: 3D Festive Nepali Typography, Linge Ping, Artwork, and Spin Action Controls */}
-        <div className="w-[360px] sm:w-[390px] lg:w-[420px] xl:w-[440px] shrink-0 h-full flex flex-col items-center justify-center text-center px-1 min-h-0 gap-3 relative">
+        <div className="w-[340px] sm:w-[370px] lg:w-[400px] shrink-0 h-full flex flex-col items-center justify-center text-center px-1 min-h-0 gap-2.5 relative">
           {/* Authentic 3D Festive Title & Linge Ping Hero Art */}
           <FestiveBanner />
 
           {/* Catchy Spin Actions */}
-          <div className="w-full flex flex-col items-center gap-2.5 mt-1 z-20">
+          <div className="w-full flex flex-col items-center gap-2 mt-0.5 z-20">
             {/* Big Primary Spin Button with 3D Gold Ring */}
             <button
               onClick={handleSpin}
@@ -247,6 +247,7 @@ export default function NutAdminPage() {
         customOdds={customOdds}
         onOpenAdminOdds={() => { setIsCatalogOpen(false); setIsAdminOddsOpen(true); }}
         onOpenProductEditor={() => { setIsCatalogOpen(false); setIsProductEditorOpen(true); }}
+        isAdmin={true}
       />
 
       {/* Admin Odds Control Panel */}

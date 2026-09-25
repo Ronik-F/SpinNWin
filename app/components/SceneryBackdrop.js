@@ -3,12 +3,18 @@
 import React from "react";
 import LingePing from "./LingePing";
 import NepaliCashNote from "./NepaliCashNote";
+import TiharLights from "./TiharLights";
 
 export default function SceneryBackdrop() {
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 select-none">
       {/* Clear Autumn Dashain Sky Gradient (शरद ऋतुको घमाईलो आकाश) */}
       <div className="absolute inset-0 bg-gradient-to-b from-sky-300 via-sky-100 to-amber-50/50" />
+
+      {/* Multicolour Tihar Wire Lights (झिलिमिली बत्तीको तोरण) across the Autumn Sky */}
+      <div className="absolute top-0 left-0 right-0 z-20">
+        <TiharLights />
+      </div>
 
       {/* Warm Golden Dashain Sun in the Autumn Sky */}
       <div className="absolute top-[8%] left-[45%] w-28 h-28 rounded-full bg-gradient-to-br from-amber-200/80 via-yellow-100/50 to-transparent blur-xl pointer-events-none" />

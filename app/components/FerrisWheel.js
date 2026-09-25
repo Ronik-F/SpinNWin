@@ -12,9 +12,9 @@ export default function FerrisWheel({
 }) {
   // Wheel geometry scaled up to fill screen with massive cabins
   const cx = 540;
-  const cy = 500;
-  const outerRadius = 380;
-  const innerRadius = 290;
+  const cy = 475;
+  const outerRadius = 390;
+  const innerRadius = 295;
 
   // 12 spokes for 12 cabins (30 deg intervals)
   const r4 = (n) => Math.round(n * 10000) / 10000;
@@ -46,10 +46,10 @@ export default function FerrisWheel({
   }, [spokes]);
 
   return (
-    <div className="relative h-full max-h-[78vh] aspect-square select-none mx-auto drop-shadow-2xl flex items-center justify-center">
+    <div className="relative h-full max-h-[92vh] sm:max-h-[95vh] aspect-square select-none mx-auto drop-shadow-2xl flex items-center justify-center">
       <svg
         viewBox="0 0 1080 1080"
-        className="h-full w-auto max-h-[78vh] overflow-visible"
+        className="h-full w-auto max-h-[92vh] sm:max-h-[95vh] overflow-visible"
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
@@ -95,11 +95,11 @@ export default function FerrisWheel({
         {/* ================= A-FRAME STAND ================= */}
         <g id="stand">
           {/* Base Ground Shadow */}
-          <ellipse cx="540" cy="1035" rx="400" ry="24" fill="#0f172a" opacity="0.22" />
+          <ellipse cx="540" cy="1035" rx="420" ry="24" fill="#0f172a" opacity="0.22" />
 
           {/* Left Leg */}
           <polygon
-            points="526,500 210,1030 268,1030 554,500"
+            points="526,475 210,1030 268,1030 554,475"
             fill="url(#legGrad)"
             stroke="#172554"
             strokeWidth="3.5"
@@ -107,15 +107,15 @@ export default function FerrisWheel({
 
           {/* Right Leg */}
           <polygon
-            points="554,500 870,1030 812,1030 526,500"
+            points="554,475 870,1030 812,1030 526,475"
             fill="url(#legGrad)"
             stroke="#172554"
             strokeWidth="3.5"
           />
 
           {/* Cross Tie Beams */}
-          <line x1="360" y1="760" x2="720" y2="760" stroke="#1e3a8a" strokeWidth="15" strokeLinecap="round" />
-          <line x1="290" y1="910" x2="790" y2="910" stroke="#1e40af" strokeWidth="16" strokeLinecap="round" />
+          <line x1="360" y1="740" x2="720" y2="740" stroke="#1e3a8a" strokeWidth="15" strokeLinecap="round" />
+          <line x1="290" y1="900" x2="790" y2="900" stroke="#1e40af" strokeWidth="16" strokeLinecap="round" />
 
           {/* Heavy Steel Foot Pads */}
           <rect x="190" y="1018" width="100" height="22" rx="5" fill="#1e293b" stroke="#475569" strokeWidth="2.5" />
@@ -131,7 +131,7 @@ export default function FerrisWheel({
         <g id="winner-pedestal">
           {/* Spotlight Upward Cone */}
           <polygon
-            points="480,1010 600,1010 660,760 420,760"
+            points="480,1010 600,1010 660,740 420,740"
             fill="url(#goldBeam)"
             className={isSpinning ? "opacity-30" : "animate-spotlight-rays"}
           />
@@ -172,7 +172,7 @@ export default function FerrisWheel({
 
           {/* Golden Arrow pointing up to the 6 o'clock cabin */}
           <polygon
-            points="540,920 522,960 558,960"
+            points="540,925 522,965 558,965"
             fill="#f59e0b"
             stroke="#ffffff"
             strokeWidth="3.5"
@@ -215,7 +215,7 @@ export default function FerrisWheel({
             r={outerRadius}
             fill="none"
             stroke="#1d4ed8"
-            strokeWidth="13"
+            strokeWidth="14"
           />
           <circle
             cx={cx}
@@ -223,9 +223,27 @@ export default function FerrisWheel({
             r={outerRadius - 3}
             fill="none"
             stroke="#60a5fa"
-            strokeWidth="3"
+            strokeWidth="3.5"
             opacity="0.9"
           />
+
+          {/* 24 Sparkling Festival LED Bulbs along Outer Rim */}
+          {Array.from({ length: 24 }).map((_, i) => {
+            const a = (i * 15 * Math.PI) / 180;
+            const bx = r4(cx + (outerRadius + 3) * Math.sin(a));
+            const by = r4(cy - (outerRadius + 3) * Math.cos(a));
+            return (
+              <circle
+                key={`rim-bulb-${i}`}
+                cx={bx}
+                cy={by}
+                r="4.2"
+                fill={i % 3 === 0 ? "#fef08a" : i % 3 === 1 ? "#f59e0b" : "#ef4444"}
+                stroke="#ca8a04"
+                strokeWidth="1.2"
+              />
+            );
+          })}
 
           {/* Inner Rim */}
           <circle
@@ -234,7 +252,7 @@ export default function FerrisWheel({
             r={innerRadius}
             fill="none"
             stroke="#2563eb"
-            strokeWidth="8"
+            strokeWidth="9"
           />
 
           {/* Structural Cross Trusses */}
@@ -304,20 +322,20 @@ export default function FerrisWheel({
               >
                 {/* Heavy Steel Hanger Bracket */}
                 <path
-                  d="M 0 0 L -22 28 L 22 28 Z"
+                  d="M 0 -8 L -18 18 L 18 18 Z"
                   fill="none"
                   stroke="#1e3a8a"
-                  strokeWidth="5.5"
+                  strokeWidth="5"
                   strokeLinejoin="round"
                 />
-                <circle cx="0" cy="0" r="5.5" fill="#facc15" stroke="#ca8a04" strokeWidth="2" />
+                <circle cx="0" cy="-6" r="5" fill="#facc15" stroke="#ca8a04" strokeWidth="2" />
 
-                {/* Cabin Outer Shell - Extra Large (136x118) */}
+                {/* Cabin Outer Shell - Extra Large (144x124) */}
                 <rect
-                  x="-68"
-                  y="26"
-                  width="136"
-                  height="118"
+                  x="-72"
+                  y="16"
+                  width="144"
+                  height="124"
                   rx="26"
                   fill={prize.cabinColor || "#ef4444"}
                   stroke={isWinnerCabin ? "#facc15" : (prize.borderColor || "#0f172a")}
@@ -325,23 +343,23 @@ export default function FerrisWheel({
                 />
 
                 {/* Top Roof Accent Strip */}
-                <rect x="-50" y="31" width="100" height="5" rx="2.5" fill="#ffffff" opacity="0.5" />
+                <rect x="-52" y="21" width="104" height="5" rx="2.5" fill="#ffffff" opacity="0.55" />
 
-                {/* Large Bright Viewing Window (120x96) */}
+                {/* Large Bright Viewing Window (128x100) */}
                 <rect
-                  x="-60"
-                  y="38"
-                  width="120"
-                  height="96"
+                  x="-64"
+                  y="28"
+                  width="128"
+                  height="100"
                   rx="20"
                   fill="#ffffff"
                   stroke="#cbd5e1"
                   strokeWidth="2.5"
                 />
 
-                {/* Massive Product Image (108px x 86px) - Clearly visible from across the room! */}
+                {/* Massive Product Image (116px x 92px) - Clearly visible from across the room! */}
                 {prize.img && (
-                  <foreignObject x="-54" y="40" width="108" height="86">
+                  <foreignObject x="-58" y="30" width="116" height="92">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={prize.img}
@@ -351,6 +369,7 @@ export default function FerrisWheel({
                         height: "100%",
                         objectFit: "contain",
                         display: "block",
+                        filter: "drop-shadow(0 3px 6px rgba(0,0,0,0.18))",
                       }}
                       referrerPolicy="no-referrer"
                       crossOrigin="anonymous"
@@ -362,21 +381,21 @@ export default function FerrisWheel({
                 {prize.value && (
                   <g>
                     <rect
-                      x="-44"
-                      y="18"
-                      width="88"
-                      height="17"
-                      rx="8.5"
+                      x="-46"
+                      y="8"
+                      width="92"
+                      height="18"
+                      rx="9"
                       fill="#fef08a"
                       stroke="#ca8a04"
                       strokeWidth="1.5"
                     />
                     <text
                       x="0"
-                      y="30.5"
+                      y="20.5"
                       textAnchor="middle"
                       fill="#854d0e"
-                      fontSize="9.5"
+                      fontSize="10"
                       fontWeight="900"
                       style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
                     >
@@ -387,34 +406,34 @@ export default function FerrisWheel({
 
                 {/* High-Contrast Bold Prize Name Label */}
                 <rect
-                  x="-58"
+                  x="-64"
                   y="114"
-                  width="116"
-                  height="22"
-                  rx="11"
+                  width="128"
+                  height="24"
+                  rx="12"
                   fill="#0f172a"
                   opacity="0.95"
                 />
                 <text
                   x="0"
-                  y="129"
+                  y="130"
                   textAnchor="middle"
                   fill="#ffffff"
-                  fontSize="11.5"
+                  fontSize="12"
                   fontWeight="900"
                   style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
                 >
-                  {prize.name.length > 15 ? prize.name.slice(0, 14) + "…" : prize.name}
+                  {prize.name && prize.name.length > 16 ? prize.name.slice(0, 15) + "…" : prize.name}
                 </text>
 
                 {/* Pulsing Highlight if Winner */}
                 {isWinnerCabin && (
                   <rect
-                    x="-76"
-                    y="18"
-                    width="152"
-                    height="134"
-                    rx="32"
+                    x="-80"
+                    y="10"
+                    width="160"
+                    height="138"
+                    rx="30"
                     fill="none"
                     stroke="#fbbf24"
                     strokeWidth="6"

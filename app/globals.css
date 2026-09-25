@@ -114,13 +114,13 @@ body {
 
 @keyframes pingSwing {
   0% {
-    transform: rotate(-18deg);
+    transform: rotate(-32deg);
   }
   50% {
-    transform: rotate(24deg);
+    transform: rotate(32deg);
   }
   100% {
-    transform: rotate(-18deg);
+    transform: rotate(-32deg);
   }
 }
 
@@ -143,8 +143,38 @@ body {
 }
 
 .animate-ping-swing {
-  transform-origin: 250px 105px;
-  animation: pingSwing 4.5s ease-in-out infinite;
+  transform-origin: 250px 145px;
+  animation: pingSwing 3.6s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+}
+
+@keyframes tiharTwinkle1 {
+  0%, 100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px currentColor);
+  }
+  50% {
+    opacity: 0.45;
+    filter: drop-shadow(0 0 1px currentColor);
+  }
+}
+
+@keyframes tiharTwinkle2 {
+  0%, 100% {
+    opacity: 0.45;
+    filter: drop-shadow(0 0 1px currentColor);
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px currentColor);
+  }
+}
+
+.animate-tihar-1 {
+  animation: tiharTwinkle1 1.6s ease-in-out infinite;
+}
+
+.animate-tihar-2 {
+  animation: tiharTwinkle2 1.6s ease-in-out infinite;
 }
 
 .animate-cash-drift {
@@ -154,5 +184,6 @@ body {
 .animate-bird-glide {
   animation: birdGlide 7s ease-in-out infinite;
 }
+
 
 

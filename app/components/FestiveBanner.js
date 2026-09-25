@@ -86,6 +86,32 @@ export default function FestiveBanner() {
       {/* 🌟 CATCHY FESTIVE HERO STAGE CARD */}
       {/* ============================================================== */}
       <div className="w-full bg-white/75 backdrop-blur-md rounded-3xl p-4 sm:p-5 border-2 border-white/90 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.12),0_0_30px_rgba(251,191,36,0.2)] relative overflow-hidden z-10 flex flex-col items-center">
+        {/* Decorative Mini Tihar Multicolour Wire Lights (झिलिमिली बत्ती माला) */}
+        <div className="w-full flex items-center justify-around px-3 mb-1 opacity-95">
+          {[
+            { c: "#ef4444", a: "animate-tihar-1" },
+            { c: "#f59e0b", a: "animate-tihar-2" },
+            { c: "#10b981", a: "animate-tihar-1" },
+            { c: "#3b82f6", a: "animate-tihar-2" },
+            { c: "#ec4899", a: "animate-tihar-1" },
+            { c: "#facc15", a: "animate-tihar-2" },
+            { c: "#8b5cf6", a: "animate-tihar-1" },
+            { c: "#06b6d4", a: "animate-tihar-2" },
+            { c: "#ef4444", a: "animate-tihar-1" },
+          ].map((bulb, i) => (
+            <div key={i} className="flex flex-col items-center">
+              <div className="w-1 h-1 bg-slate-800 rounded-t-xs" />
+              <div
+                className={`w-2.5 h-3.5 rounded-full border border-white/60 ${bulb.a}`}
+                style={{
+                  backgroundColor: bulb.c,
+                  boxShadow: `0 0 8px ${bulb.c}`,
+                }}
+              />
+            </div>
+          ))}
+        </div>
+
         {/* Decorative Festive Marigold Flower Garland (सयपत्री फूलको तोरण) */}
         <div className="flex items-center justify-center gap-1.5 mb-1.5 opacity-90">
           {["🌼", "🌸", "🌼", "🌸", "🌼", "🌸", "🌼"].map((flower, idx) => (
