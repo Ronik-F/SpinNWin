@@ -62,7 +62,7 @@ export default function PrizeReveal({
     }, 1000);
 
     const redirectTimeout = setTimeout(() => {
-      router.push("/?celebrate=grand");
+      router.push("/spin2");
     }, 4000);
 
     return () => {
@@ -118,7 +118,7 @@ export default function PrizeReveal({
   }, [isWinner, effectivePrizeValue]);
 
   const handleGoToCelebration = () => {
-    router.push("/?celebrate=grand");
+    router.push("/spin2");
   };
 
   return (
@@ -127,7 +127,7 @@ export default function PrizeReveal({
         {/* Top Header Tag */}
         <div className="prize-modal-tag flex items-center justify-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-spin" />
-          <span>CASHPATTI SHOWDOWN RESULT • दोस्रो खेल</span>
+          <span>CASHPATTI SHOWDOWN RESULT • दोस्रो खेल (२/३)</span>
         </div>
 
         {/* Customer greeting if present */}
@@ -179,8 +179,8 @@ export default function PrizeReveal({
             <Clock className="w-3.5 h-3.5 animate-spin" />
             <span>
               {isWinner
-                ? `दुवै उपहारको भव्य उत्सव हेर्न होमपेजमा जाँदैछ (${countdown}s)...`
-                : `जितेको उपहार हेर्न होमपेजमा जाँदैछ (${countdown}s)...`}
+                ? `तेस्रो खेलमा जाँदैछ — SPIN 3 (${countdown}s)...`
+                : `तेस्रो खेलमा जाँदैछ — SPIN 3 (${countdown}s)...`}
             </span>
           </div>
           <div className="w-full h-1.5 bg-black/40 rounded-full overflow-hidden">
@@ -199,8 +199,8 @@ export default function PrizeReveal({
           <Trophy className="w-5 h-5 text-amber-200" />
           <span>
             {isWinner
-              ? "दुवै उपहार हेर्नुहोस् (VIEW BOTH PRIZES)"
-              : "जितेको उपहार हेर्नुहोस् (VIEW YOUR PRIZE)"}
+              ? "तेस्रो खेल खेल्नुहोस् (PLAY SPIN 3) ➔"
+              : "तेस्रो खेल खेल्नुहोस् (PLAY SPIN 3) ➔"}
           </span>
           <ArrowRight className="w-5 h-5 text-amber-200 group-hover:translate-x-1 transition-transform" />
         </button>

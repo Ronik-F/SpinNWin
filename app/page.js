@@ -51,7 +51,7 @@ export default function Home() {
       const searchParams = new URLSearchParams(window.location.search);
       const isGrand =
         searchParams.get("celebrate") === "grand" ||
-        (sess?.prize1 && sess?.prize2);
+        (sess?.prize1 && sess?.prize2 && sess?.prize3);
       if (isGrand && sess) {
         setIsGrandModalOpen(true);
       }
@@ -261,18 +261,14 @@ export default function Home() {
       {/* Top Right Floating CashPatti Link Button & Grand Celebration shortcut */}
       <div className="absolute top-3 right-3 sm:top-4 sm:right-6 z-40 flex items-center gap-2">
         {/* If customer already has prizes recorded, show Celebration Button */}
-        {customerSession?.prize1 && customerSession?.prize2 && (
+        {customerSession?.prize1 && customerSession?.prize2 && customerSession?.prize3 && (
           <button
             onClick={() => setIsGrandModalOpen(true)}
             className="px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black text-xs sm:text-sm tracking-wide border-2 border-white shadow-lg flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer animate-pulse"
             title="View prizes won"
           >
             <Trophy className="w-4 h-4 text-slate-900" />
-            <span>
-              {customerSession.prize2.won && customerSession.prize2.prizeValue > 0
-                ? "२ वटै उपहार हेर्नुहोस्"
-                : "जितेको उपहार हेर्नुहोस्"}
-            </span>
+            <span>३ वटै उपहार हेर्नुहोस्</span>
           </button>
         )}
 

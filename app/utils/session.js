@@ -1,6 +1,8 @@
 "use client";
 
-const SESSION_KEY = "alamtech_dashain_session_v1";
+// Session schema:
+// { name, phone, prize1 (wheel spin 1), prize2 (cashpatti), prize3 (wheel spin 2), updatedAt }
+const SESSION_KEY = "alamtech_dashain_session_v2";
 
 /**
  * Get current customer session from localStorage / sessionStorage
