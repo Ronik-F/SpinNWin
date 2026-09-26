@@ -4,8 +4,8 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import PlayerSeat, { PLAYER_NAMES } from "./components/PlayerSeat";
 import PrizeReveal from "./components/PrizeReveal";
 import TiharLights from "../components/TiharLights";
-import NepaliCashNote from "../components/NepaliCashNote";
-import { Play, Sparkles, ArrowLeft, Trophy, Shuffle, Zap } from "lucide-react";
+import { Play, Sparkles, ArrowLeft, Trophy, Shuffle, Zap, Clock } from "lucide-react";
+import { getCustomerSession } from "../utils/session";
 
 // ─── Game Phases ──────────────────────────────────────────────────────────────
 const PHASE = {
@@ -62,14 +62,27 @@ export default function CashPattiPage() {
   const [error, setError] = useState(null);
   const [statusText, setStatusText] = useState("Pick One Player");
 
+  // Customer session and auto-fade countdown
+  const [customerSession, setCustomerSession] = useState(null);
+  const [autoStartCount, setAutoStartCount] = useState(5);
+  const [isFadingOut, setIsFadingOut] = useState(false);
+  const autoStartTimerRef = useRef(null);
+
   const revealOrderRef = useRef([]);
   const animTimers = useRef([]);
 
   useEffect(() => {
     sessionStorage.removeItem("cashpatti_session");
+    const sess = getCustomerSession();
+    if (sess) {
+      setCustomerSession(sess);
+    }
   }, []);
 
-  useEffect(() => () => animTimers.current.forEach(clearTimeout), []);
+  useEffect(() => () => {
+    animTimers.current.forEach(clearTimeout);
+    if (autoStartTimerRef.current) clearInterval(autoStartTimerRef.current);
+  }, []);
 
   const addTimer = (fn, ms) => {
     const id = setTimeout(fn, ms);
@@ -79,6 +92,7 @@ export default function CashPattiPage() {
 
   // ── Phase 1: Start Game ─────────────────────────────────────────────────────
   const handleStartGame = useCallback(async () => {
+    if (autoStartTimerRef.current) clearInterval(autoStartTimerRef.current);
     setError(null);
     setPhase(PHASE.LOADING);
     setStatusText("Preparing Table...");
@@ -101,6 +115,32 @@ export default function CashPattiPage() {
       setPhase(PHASE.IDLE);
     }
   }, []);
+
+  // ── Auto-fade into table after 5 seconds ───────────────────────────────────
+  useEffect(() => {
+    if (phase === PHASE.IDLE) {
+      setAutoStartCount(5);
+      setIsFadingOut(false);
+
+      const interval = setInterval(() => {
+        setAutoStartCount((prev) => Math.max(0, prev - 1));
+      }, 1000);
+
+      const fadeTimeout = setTimeout(() => {
+        setIsFadingOut(true);
+      }, 3800);
+
+      const startTimeout = setTimeout(() => {
+        handleStartGame();
+      }, 5000);
+
+      return () => {
+        clearInterval(interval);
+        clearTimeout(fadeTimeout);
+        clearTimeout(startTimeout);
+      };
+    }
+  }, [phase, handleStartGame]);
 
   // ── Phase 2: Click Player ───────────────────────────────────────────────────
   const handlePlayerClick = useCallback(
@@ -340,15 +380,14 @@ export default function CashPattiPage() {
       {/* PHASE 1: IDLE / PRIZE POOL SHOWCASE                            */}
       {/* ============================================================== */}
       {phase === PHASE.IDLE && (
-        <section className="cp-intro-section">
-          {/* Floating Nepali Currency Notes from Spinner Section */}
-          <div className="cp-floating-cash top-left hidden md:block">
-            <NepaliCashNote side="front" width={110} height={50} className="rotate-12 animate-float-slow" />
-          </div>
-          <div className="cp-floating-cash bottom-right hidden md:block">
-            <NepaliCashNote side="back" width={120} height={54} className="-rotate-12 animate-float-slow" style={{ animationDelay: "1.8s" }} />
-          </div>
-
+        <section
+          className="cp-intro-section"
+          style={{
+            transition: "all 0.7s cubic-bezier(0.4, 0, 0.2, 1)",
+            opacity: isFadingOut ? 0 : 1,
+            transform: isFadingOut ? "scale(0.96) translateY(12px)" : "scale(1) translateY(0)",
+          }}
+        >
           {/* Floating Dashain Diamond Kites */}
           <div className="cp-floating-kite top-right hidden lg:block">
             <div className="w-9 h-9 bg-gradient-to-br from-amber-400 to-yellow-500 rotate-45 border-2 border-white shadow-lg animate-float-slow" />
@@ -364,6 +403,21 @@ export default function CashPattiPage() {
               <span>ALAMTECH.COM.NP • DASHAIN &amp; TIHAR SPECIAL</span>
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             </div>
+
+            {/* Remembered Spin Wheel Product & Customer Details */}
+            {customerSession?.prize1 && (
+              <div className="my-2 py-2.5 px-4 rounded-2xl bg-gradient-to-r from-amber-500/25 via-yellow-500/20 to-amber-500/25 border-2 border-amber-400/70 shadow-lg flex items-center justify-center gap-3 text-amber-200 animate-pulse">
+                <Sparkles className="w-4 h-4 text-amber-300 animate-spin shrink-0" />
+                <div className="text-xs sm:text-sm font-bold text-center">
+                  <span className="text-white">
+                    {customerSession.name ? `${customerSession.name} को ` : ""}पहिलो उपहार सुरक्षित:{" "}
+                  </span>
+                  <strong className="text-amber-300 font-extrabold">
+                    {customerSession.prize1.name}
+                  </strong>
+                </div>
+              </div>
+            )}
 
             <h1 className="cp-hero-title">
               <span>CASHPATTI</span>
@@ -422,15 +476,24 @@ export default function CashPattiPage() {
               </div>
             </div>
 
-            {/* CTA Button */}
-            <button
-              onClick={handleStartGame}
-              className="cp-cta-spin-btn group"
-            >
-              <div className="cp-cta-shine" />
-              <Play className="w-6 h-6 fill-current text-white group-hover:scale-110 transition-transform" />
-              <span>ENTER CASHPATTI TABLE (खेल्नुहोस्)</span>
-            </button>
+            {/* Auto-fade timer info and CTA Button */}
+            <div className="flex flex-col items-center gap-2.5 w-full mt-1">
+              <button
+                onClick={handleStartGame}
+                className="cp-cta-spin-btn group w-full"
+              >
+                <div className="cp-cta-shine" />
+                <Play className="w-6 h-6 fill-current text-white group-hover:scale-110 transition-transform" />
+                <span>ENTER CASHPATTI TABLE (खेल्नुहोस्)</span>
+              </button>
+
+              <div className="flex items-center gap-2 text-xs font-bold text-amber-300">
+                <Clock className="w-3.5 h-3.5 text-amber-400 animate-spin" />
+                <span>
+                  {autoStartCount} सेकेन्डमा स्वतः टेबल खुल्दैछ... (Auto-entering table in {autoStartCount}s)
+                </span>
+              </div>
+            </div>
           </div>
         </section>
       )}

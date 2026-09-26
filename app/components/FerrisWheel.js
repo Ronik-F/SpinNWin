@@ -1,15 +1,20 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useRef, useImperativeHandle, forwardRef } from "react";
 
-export default function FerrisWheel({
-  prizes = [],
-  rotation = 0,
-  swayAngle = 0,
-  winningIndex = null,
-  isSpinning = false,
-  onSpinClick,
-}) {
+const FerrisWheel = forwardRef(function FerrisWheel(
+  {
+    prizes = [],
+    rotation = 0,
+    swayAngle = 0,
+    winningIndex = null,
+    isSpinning = false,
+    onSpinClick,
+  },
+  ref
+) {
+  const wheelGroupRef = useRef(null);
+  const cabinRefs = useRef([]);
   // Wheel geometry scaled up to fill screen with massive cabins
   const cx = 540;
   const cy = 475;
@@ -44,6 +49,29 @@ export default function FerrisWheel({
       };
     });
   }, [spokes]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      setTransform: (rot, sway = 0) => {
+        if (wheelGroupRef.current) {
+          wheelGroupRef.current.setAttribute("transform", `rotate(${rot}, ${cx}, ${cy})`);
+        }
+        for (let i = 0; i < 10; i++) {
+          const cabin = cabinRefs.current[i];
+          if (cabin) {
+            const spoke = spokes[i];
+            cabin.setAttribute(
+              "transform",
+              `translate(${spoke.xOuter}, ${spoke.yOuter}) rotate(${-rot + sway})`
+            );
+          }
+        }
+      },
+    }),
+    [cx, cy, spokes]
+  );
+
 
   return (
     <div className="relative h-full max-h-[92vh] sm:max-h-[95vh] aspect-square select-none mx-auto drop-shadow-2xl flex items-center justify-center">
@@ -207,7 +235,12 @@ export default function FerrisWheel({
         </g>
 
         {/* ================= REVOLVING WHEEL ASSEMBLY ================= */}
-        <g id="revolving-wheel" transform={`rotate(${rotation}, ${cx}, ${cy})`}>
+        <g
+          id="revolving-wheel"
+          ref={wheelGroupRef}
+          transform={`rotate(${rotation}, ${cx}, ${cy})`}
+          style={{ willChange: "transform" }}
+        >
           {/* Outer Main Rim */}
           <circle
             cx={cx}
@@ -316,9 +349,13 @@ export default function FerrisWheel({
             return (
               <g
                 key={`cabin-${spoke.index}`}
+                ref={(el) => {
+                  cabinRefs.current[spoke.index] = el;
+                }}
                 transform={`translate(${spoke.xOuter}, ${spoke.yOuter}) rotate(${-rotation + swayAngle})`}
                 filter="url(#cabinShadow)"
                 className="cursor-pointer"
+                style={{ willChange: "transform" }}
               >
                 {/* Heavy Steel Hanger Bracket */}
                 <path
@@ -377,32 +414,7 @@ export default function FerrisWheel({
                   </foreignObject>
                 )}
 
-                {/* Golden Price Tag Badge at Top of Cabin */}
-                {prize.value && (
-                  <g>
-                    <rect
-                      x="-46"
-                      y="8"
-                      width="92"
-                      height="18"
-                      rx="9"
-                      fill="#fef08a"
-                      stroke="#ca8a04"
-                      strokeWidth="1.5"
-                    />
-                    <text
-                      x="0"
-                      y="20.5"
-                      textAnchor="middle"
-                      fill="#854d0e"
-                      fontSize="10"
-                      fontWeight="900"
-                      style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
-                    >
-                      {prize.value}
-                    </text>
-                  </g>
-                )}
+
 
                 {/* High-Contrast Bold Prize Name Label */}
                 <rect
@@ -510,4 +522,7 @@ export default function FerrisWheel({
       </svg>
     </div>
   );
-}
+});
+
+export default FerrisWheel;
+
