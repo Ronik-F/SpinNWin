@@ -266,7 +266,7 @@ export const BUMPER_PRIZES = [
     fullName: "Premium Laptop Cooler",
     nepaliName: "ल्यापटप कुलर",
     brand: "Bumper Offer",
-    img: "/products/laptop_cooler.webp",
+    img: "/products/laptopccc.jpg",
     url: "",
     cabinColor: "#8b5cf6",
     borderColor: "#6d28d9",
