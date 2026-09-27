@@ -12,6 +12,7 @@ import PrizePoolCatalogModal from "./components/PrizePoolCatalogModal";
 import { INITIAL_PRIZES, CASH_PRIZES, BUMPER_PRIZES } from "./data/prizes";
 import { playTickSound, playWhooshSound, playWinFanfare } from "./utils/audio";
 import { pickWeightedWinnerIndex } from "./utils/weightedRandom";
+import {
   getCustomerSession,
   saveCustomerSession,
   clearCustomerSession,
