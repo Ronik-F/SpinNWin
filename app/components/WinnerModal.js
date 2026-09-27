@@ -17,7 +17,7 @@ import {
 import { playYayyy } from "../utils/audio";
 import { getCustomerSession, saveCustomerSession } from "../utils/session";
 
-export default function WinnerModal({ prize, isOpen, onClose, customerName }) {
+export default function WinnerModal({ prize, isOpen, onClose, customerName, isRound1, isRound2, isRound3 }) {
   const router = useRouter();
   const hasPlayedRef = useRef(false);
   const [countdown, setCountdown] = useState(5);
@@ -36,8 +36,7 @@ export default function WinnerModal({ prize, isOpen, onClose, customerName }) {
   // Persist prize 1 to session and trigger celebrations & 5s auto-redirect
   useEffect(() => {
     if (isOpen && prize) {
-      // Save prize1 to customer session
-      saveCustomerSession({ prize1: prize });
+      // (Prize saving is now handled in page.js)
 
       if (!hasPlayedRef.current) {
         hasPlayedRef.current = true;
@@ -101,7 +100,7 @@ export default function WinnerModal({ prize, isOpen, onClose, customerName }) {
       }, 1000);
 
       const redirectTimeout = setTimeout(() => {
-        router.push("/cashpatti");
+        onClose?.();
       }, 5000);
 
       return () => {
@@ -120,9 +119,8 @@ export default function WinnerModal({ prize, isOpen, onClose, customerName }) {
 
   const displayName = prize.name || prize.fullName || "Prize";
 
-  const handleGoToCashpatti = () => {
+  const handleNextAction = () => {
     onClose?.();
-    router.push("/cashpatti");
   };
 
   return (
@@ -157,13 +155,16 @@ export default function WinnerModal({ prize, isOpen, onClose, customerName }) {
         <div className="relative z-10 m-[2.5px] rounded-[32px] overflow-hidden bg-white flex flex-col">
           {/* ── TOP HERO ZONE (full-bleed image) ── */}
           <div
-            className="relative w-full flex items-center justify-center overflow-hidden"
+            className={`relative w-full flex items-center justify-center overflow-hidden ${isRound3 ? "bg-red-700" : ""}`}
             style={{
               minHeight: "290px",
-              background: `radial-gradient(ellipse at 50% 40%, ${prize.cabinColor || "#f59e0b"
+              background: isRound3 ? "linear-gradient(180deg, #991b1b, #dc2626)" : `radial-gradient(ellipse at 50% 40%, ${prize.cabinColor || "#f59e0b"
                 }18 0%, #f8fafc 55%, #f1f5f9 100%)`,
             }}
           >
+            {isRound3 && (
+              <div className="absolute inset-0 z-0 opacity-50 bg-[repeating-linear-gradient(90deg,transparent,transparent_20px,rgba(0,0,0,0.1)_20px,rgba(0,0,0,0.1)_40px)] mix-blend-multiply" />
+            )}
             {/* Rotating sunburst */}
             <svg
               className="absolute inset-0 w-full h-full pointer-events-none"
@@ -249,8 +250,8 @@ export default function WinnerModal({ prize, isOpen, onClose, customerName }) {
                 <Trophy className="w-3.5 h-3.5 text-amber-200 drop-shadow" />
                 <span>
                   {name
-                    ? `बधाई छ, ${name}! (WINNER)`
-                    : "विजेता • CONGRATULATIONS!"}
+                    ? `CONGRATULATIONS, ${name}! (WINNER)`
+                    : "WINNER • CONGRATULATIONS!"}
                 </span>
                 <Sparkles
                   className="w-3.5 h-3.5 text-amber-200"
@@ -272,7 +273,7 @@ export default function WinnerModal({ prize, isOpen, onClose, customerName }) {
             </h2>
             {prize.nepaliName && (
               <p className="text-sm font-black text-red-600 mt-0.5 tracking-wide">
-                {prize.nepaliName}
+                ({prize.nepaliName})
               </p>
             )}
 
@@ -281,14 +282,16 @@ export default function WinnerModal({ prize, isOpen, onClose, customerName }) {
               <div className="flex items-center justify-between text-xs font-bold mb-1.5">
                 <span className="flex items-center gap-1.5 text-amber-300">
                   <Clock className="w-3.5 h-3.5 animate-spin" />
-                  <span>क्यास पत्ती खेलमा जाँदैछ...</span>
+                  <span>{isRound3 ? "Proceeding to Grand Finale..." : (isRound2 ? "Proceeding to Bumper Round..." : "Proceeding to Round 2...")}</span>
                 </span>
                 <span className="px-2 py-0.5 rounded-full bg-amber-400 text-slate-950 font-black text-[11px]">
                   {countdown}s
                 </span>
               </div>
               <p className="text-[11px] text-purple-200/90 text-left">
-                दोस्रो उपहार जित्न स्वतः क्यास पत्तीमा रिडाइरेक्ट हुँदैछ (अहिले नै खेल्न तल थिच्नुहोस्):
+                {isRound3 
+                  ? "Automatically proceeding to the Bumper Round:" 
+                  : (isRound2 ? "Automatically proceeding to the Bumper Round so you can win your 3rd prize:" : "Automatically proceeding to Round 2 so you can win your 2nd prize:")}
               </p>
               {/* Progress Bar */}
               <div className="w-full h-1.5 bg-purple-950/60 rounded-full overflow-hidden mt-2">
@@ -302,12 +305,12 @@ export default function WinnerModal({ prize, isOpen, onClose, customerName }) {
             {/* Action Button: Play CashPatti Immediately */}
             <div className="flex gap-2 mt-3">
               <button
-                onClick={handleGoToCashpatti}
+                onClick={handleNextAction}
                 className="w-full py-3.5 px-4 rounded-2xl font-black text-sm text-white transition-all active:scale-95 shadow-lg flex items-center justify-center gap-2 cursor-pointer relative overflow-hidden group bg-gradient-to-r from-purple-700 via-indigo-600 to-amber-600 hover:from-purple-600 hover:to-amber-500 border border-white/20"
               >
                 <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 pointer-events-none" />
                 <Gamepad2 className="w-4 h-4 text-amber-300" />
-                <span>अहिले नै खेल्नुहोस्: CASHPATTI ➔</span>
+                <span>{isRound3 ? "START BUMPER WHEEL ➔" : (isRound2 ? "START BUMPER ROUND ➔" : "START ROUND 2 ➔")}</span>
                 <ArrowRight className="w-4 h-4 text-amber-300 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>

@@ -16,11 +16,11 @@ export default function CustomerDetailsModal({ isOpen, onClose, onSubmit }) {
     const cleanPhone = phone.trim().replace(/\s+/g, "");
 
     if (!cleanName || cleanName.length < 2) {
-      setError("कृपया आफ्नो पूरा नाम प्रविष्ट गर्नुहोस् (Please enter your name)");
+      setError("Please enter your full name.");
       return;
     }
     if (!cleanPhone || cleanPhone.length < 7) {
-      setError("कृपया सही फोन नम्बर प्रविष्ट गर्नुहोस् (Please enter a valid phone number)");
+      setError("Please enter a valid phone number.");
       return;
     }
 
@@ -95,17 +95,23 @@ export default function CustomerDetailsModal({ isOpen, onClose, onSubmit }) {
 
           {/* Header Title Section */}
           <div className="text-center pt-3 pb-4">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 font-bold text-[11px] uppercase tracking-wider mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-spin" />
-              <span>दशैं तथा तिहार विशेष उपहार योजना</span>
-              <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-spin" />
+            <div className="flex flex-col items-center justify-center mb-2">
+              <h1 className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-500 to-orange-500 tracking-widest uppercase drop-shadow-md">
+                ALAMTECH
+              </h1>
             </div>
 
-            <h2 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 tracking-tight leading-snug">
-              ग्राहक विवरण प्रविष्ट गर्नुहोस्
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-orange-500/15 border border-orange-400/30 text-orange-300 font-bold text-[11px] uppercase tracking-wider mb-2">
+              <Sparkles className="w-3.5 h-3.5 text-orange-400 animate-spin" />
+              <span>Dashain & Tihar Special Offer</span>
+              <Sparkles className="w-3.5 h-3.5 text-orange-400 animate-spin" />
+            </div>
+
+            <h2 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-200 via-yellow-100 to-orange-300 tracking-tight leading-snug">
+              Enter Customer Details
             </h2>
             <p className="text-xs sm:text-sm text-slate-300/80 mt-1 max-w-[340px] mx-auto">
-              आफ्नो नाम र फोन नम्बर राखी पाङ्ग्रा घुमाउनुहोस् र <strong className="text-amber-300 font-bold">२ वटै उपहार</strong> जित्नुहोस्!
+              Enter your name and phone number to start spinning and win <strong className="text-orange-300 font-bold">up to 3 prizes</strong>!
             </p>
           </div>
 
@@ -122,7 +128,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, onSubmit }) {
             <div className="flex flex-col gap-1.5 text-left">
               <label className="text-xs font-bold text-amber-200/90 flex items-center gap-1.5">
                 <User className="w-3.5 h-3.5 text-amber-400" />
-                <span>तपाईंको शुभ नाम (Customer Name)</span>
+                <span>Customer Name</span>
                 <span className="text-red-400">*</span>
               </label>
               <div className="relative">
@@ -133,7 +139,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, onSubmit }) {
                     setName(e.target.value);
                     if (error) setError("");
                   }}
-                  placeholder="उदा: Alamtech"
+                  placeholder="e.g. Alamtech"
                   autoFocus
                   className="w-full px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/15 focus:bg-white/20 border border-amber-400/40 focus:border-amber-300 text-white placeholder-slate-400 text-sm font-semibold outline-none transition-all shadow-inner focus:ring-2 focus:ring-amber-400/40"
                 />
@@ -144,7 +150,7 @@ export default function CustomerDetailsModal({ isOpen, onClose, onSubmit }) {
             <div className="flex flex-col gap-1.5 text-left">
               <label className="text-xs font-bold text-amber-200/90 flex items-center gap-1.5">
                 <Phone className="w-3.5 h-3.5 text-amber-400" />
-                <span>मोबाइल नम्बर (Phone Number)</span>
+                <span>Phone Number</span>
                 <span className="text-red-400">*</span>
               </label>
               <div className="relative">
@@ -155,17 +161,16 @@ export default function CustomerDetailsModal({ isOpen, onClose, onSubmit }) {
                     setPhone(e.target.value);
                     if (error) setError("");
                   }}
-                  placeholder="उदा: 9745256574"
+                  placeholder="e.g. 9745256574"
                   className="w-full px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/15 focus:bg-white/20 border border-amber-400/40 focus:border-amber-300 text-white placeholder-slate-400 text-sm font-semibold outline-none transition-all shadow-inner focus:ring-2 focus:ring-amber-400/40"
                 />
               </div>
             </div>
 
-            {/* Dashain & Tihar Feature Note */}
             <div className="rounded-xl bg-amber-500/10 border border-amber-500/20 p-2.5 flex items-center gap-2.5 text-[11px] text-amber-200/80">
               <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>
-                पाङ्ग्रामा पहिलो उपहार जितेपछि स्वतः क्यास पत्तीमा दोस्रो नगद उपहार जित्न जानुहुनेछ!
+                After winning the first prize, you will automatically move to the second and third rounds!
               </span>
             </div>
 
@@ -176,15 +181,14 @@ export default function CustomerDetailsModal({ isOpen, onClose, onSubmit }) {
             >
               <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 pointer-events-none" />
               <Play className="w-5 h-5 fill-current" />
-              <span>पाङ्ग्रा घुमाउनुहोस् (SPIN NOW)</span>
+              <span>START THE GAME</span>
             </button>
           </form>
 
           {/* Decorative Diya Footer Accent */}
-          <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-center gap-2 text-[11px] text-slate-400">
-            <span>🪔</span>
-            <span>AlamTech • दशैं तथा तिहार उपहार धमाका २०८१/८२</span>
-            <span>🪔</span>
+          <div className="mt-4 pt-3 border-t border-orange-500/20 flex flex-col items-center justify-center gap-1 text-[11.5px] text-orange-200/80 text-center">
+            <span className="font-semibold text-orange-300">Alamtech wishes you a Happy Dashain and Tihar.</span>
+            <span>May your Dashain be celebrated with delight! 🪔</span>
           </div>
         </div>
       </div>

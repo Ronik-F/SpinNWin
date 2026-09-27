@@ -14,7 +14,8 @@
  * GRAND PRIZE BLACKLIST: Items in GRAND_PRIZE_IDS are HARDCODED to 0% and
  * can never appear as a wheel outcome, regardless of any other setting.
  */
-import { GRAND_PRIZE_IDS } from "../data/prizes.js";
+import { GRAND_PRIZE_IDS, CASH_PRIZE_BLACKLIST } from "../data/prizes.js";
+const ALL_BLACKLIST = [...GRAND_PRIZE_IDS, ...CASH_PRIZE_BLACKLIST];
 
 /**
  * Extracts a numeric price from a prize object (either from `price` number or parsed from `value` string)
@@ -49,13 +50,13 @@ export function calculatePrizeOdds(prizes, exponent = 1.0) {
   // Calculate inverse price weights: lower price => higher weight
   // HARDCODED: Grand prizes (goat, laptop) have 0 weight and 0% odds
   const rawWeights = withPrices.map((p) => {
-    if (GRAND_PRIZE_IDS.includes(p.id)) return 0;
+    if (ALL_BLACKLIST.includes(p.id)) return 0;
     return Math.pow(1 / p.numericPrice, exponent);
   });
   const totalWeight = rawWeights.reduce((sum, w) => sum + w, 0);
 
   return withPrices.map((prize, idx) => {
-    const isBlacklisted = GRAND_PRIZE_IDS.includes(prize.id);
+    const isBlacklisted = ALL_BLACKLIST.includes(prize.id);
     const rawOdds = isBlacklisted || totalWeight === 0 ? 0 : (rawWeights[idx] / totalWeight) * 100;
     const probabilityPercent = Number(rawOdds.toFixed(2));
 
@@ -92,10 +93,10 @@ export function pickWeightedWinnerIndex(prizes, exponent = 1.0) {
   // HARDCODED SAFETY: zero-out grand prize weights before rolling
   const enriched = calculatePrizeOdds(prizes, exponent).map((p) => ({
     ...p,
-    weight: GRAND_PRIZE_IDS.includes(p.id) ? 0 : p.weight,
+    weight: ALL_BLACKLIST.includes(p.id) ? 0 : p.weight,
   }));
 
-  const eligibleEnriched = enriched.filter((p) => p.weight > 0 && !GRAND_PRIZE_IDS.includes(p.id));
+  const eligibleEnriched = enriched.filter((p) => p.weight > 0 && !ALL_BLACKLIST.includes(p.id));
   if (eligibleEnriched.length === 0) return 0;
 
   const totalWeight = eligibleEnriched.reduce((sum, p) => sum + p.weight, 0);
@@ -132,7 +133,7 @@ export function pickWeightedWinnerIndexWithCustomOdds(prizes, customOdds, expone
   const candidates = prizes
     .map((p, i) => ({
       index: i,
-      weight: GRAND_PRIZE_IDS.includes(p.id) ? 0 : Math.max(0, customOdds[i] ?? 0),
+      weight: ALL_BLACKLIST.includes(p.id) ? 0 : Math.max(0, customOdds[i] ?? 0),
     }))
     .filter((c) => c.weight > 0);
 

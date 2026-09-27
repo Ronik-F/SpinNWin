@@ -115,21 +115,21 @@ export default function GrandDoubleWinnerModal({
 
   if (!isOpen || !sessionData) return null;
 
-  const customerName = sessionData.name || "सम्मानित ग्राहक";
+  const customerName = sessionData.name || "Respected Customer";
   const customerPhone = sessionData.phone || "";
   const prize1 = sessionData.prize1 || null;
   const prize2 = sessionData.prize2 || null;
   const prize3 = sessionData.prize3 || null;
 
-  // Determine how many cash prizes were won (prize2 from cashpatti)
-  const hasCash = Boolean(prize2?.won && prize2?.prizeValue > 0);
+  // Determine if cash prize was won in Faras game
+  const hasCash = Boolean(prize3 && prize3.value > 0);
 
-  // Count total prizes shown (prize1 always shown, prize2 if cash won, prize3 always shown)
-  const colCount = hasCash ? 3 : 2; // 3 cols if cashpatti won, 2 cols if only prize1 + prize3
+  // Count total prizes shown
+  const colCount = 3; 
 
-  // Render authentic currency note image for cashpatti cash prize
+  // Render authentic currency note image for cash reward
   const renderCashRewardImage = () => {
-    const val = prize2?.prizeValue ?? 200;
+    const val = prize3?.value || 0;
 
     if (val === 200) {
       return (
@@ -200,13 +200,13 @@ export default function GrandDoubleWinnerModal({
         {slot === "cash" ? (
           <>
             <span className="text-[9px] font-black uppercase tracking-widest text-purple-300 bg-purple-400/15 px-2 py-0.5 rounded-full mx-auto">
-              {prize2?.rankLabel || "Winner Finish"}
+              {hasCash ? "Winner Finish" : "Better Luck Next Time"}
             </span>
             <h3 className="text-base sm:text-lg font-black text-white leading-tight">
-              {prize2?.prizeLabel || "Cash Reward"}
+              {prize3?.name || "Cash Reward"}
             </h3>
             <p className="text-[10px] font-bold text-purple-200">
-              {prize2?.cardPlayerName ? `खिलाडी: ${prize2.cardPlayerName}` : "Teen Patti Reward"}
+              Faras Game Reward
             </p>
           </>
         ) : (
@@ -215,7 +215,7 @@ export default function GrandDoubleWinnerModal({
               {prize?.name || "Prize"}
             </h3>
             {prize?.nepaliName && (
-              <p className="text-[10px] font-bold text-amber-200">{prize.nepaliName}</p>
+              <p className="text-[10px] font-bold text-amber-200">({prize.nepaliName})</p>
             )}
           </>
         )}
@@ -303,28 +303,24 @@ export default function GrandDoubleWinnerModal({
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-red-600/30 via-amber-500/30 to-red-600/30 border border-amber-400/50 text-amber-300 font-black text-xs uppercase tracking-widest shadow-lg mb-2">
               <span>🪔</span>
               <Sparkles className="w-4 h-4 text-amber-300 animate-spin" />
-              <span>दशैं तथा तिहार महा-बम्पर उपहार योजना २०८१/८२</span>
+              <span>Dashain & Tihar Grand Bonanza 2083</span>
               <Sparkles className="w-4 h-4 text-amber-300 animate-spin" />
               <span>🪔</span>
             </div>
 
             <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-400 drop-shadow-md">
-              हार्दिक बधाई, {customerName} ज्यू!
+              Congratulations, {customerName}!
             </h1>
 
             {customerPhone && (
               <div className="flex items-center justify-center gap-1.5 text-xs sm:text-sm font-bold text-amber-200/80 mt-1">
                 <Phone className="w-3.5 h-3.5 text-emerald-400" />
-                <span>सम्पर्क नं: {customerPhone}</span>
+                <span>Phone No: {customerPhone}</span>
               </div>
             )}
 
-            <p className="text-sm sm:text-base text-slate-200 font-semibold mt-1">
-              तपाईंले{" "}
-              <strong className="text-amber-300 font-black">
-                {colCount === 3 ? "३ वटै खेलमा" : "खेलहरूमा"}
-              </strong>{" "}
-              भव्य उपहारहरू जित्न सफल हुनुभएको छ! 🎊
+            <p className="text-sm sm:text-base text-slate-200 font-semibold mt-2">
+              Happy Dashain and Tihar! 🎊
             </p>
           </div>
 
@@ -353,57 +349,57 @@ export default function GrandDoubleWinnerModal({
               }
             />
 
-            {/* Prize 2: CashPatti (only if won) */}
-            {hasCash && (
-              <PrizeCard
-                label="🃏 दोस्रो उपहार"
-                badgeClass="bg-gradient-to-r from-purple-700 to-indigo-600"
-                prize={null}
-                borderColor="border-purple-400/60"
-                slot="cash"
-                imageSlot={
-                  <div
-                    className="relative z-10 w-full h-full flex items-center justify-center transition-transform duration-300 group-hover:scale-105"
-                    style={{ animation: "floatPrize 3.4s ease-in-out infinite" }}
-                  >
-                    {renderCashRewardImage()}
-                  </div>
-                }
-              />
-            )}
-
-            {/* Prize 3: Spin Wheel 2 */}
+            {/* Prize 2: Spin Wheel 2 */}
             <PrizeCard
-              label="🎡 तेस्रो उपहार"
+              label="🎡 Second Prize"
               badgeClass="bg-gradient-to-r from-emerald-700 to-teal-600"
-              prize={prize3}
+              prize={prize2}
               borderColor="border-emerald-400/60"
               slot="product"
               imageSlot={
-                prize3?.img ? (
+                prize2?.img ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={prize3.img}
-                    alt={prize3.name || "Wheel Prize 3"}
+                    src={prize2.img}
+                    alt={prize2.name || "Wheel Prize 2"}
                     className="relative z-10 max-h-32 sm:max-h-36 object-contain drop-shadow-2xl transition-transform duration-300 group-hover:scale-105"
-                    style={{ animation: "floatPrize 3.8s ease-in-out infinite" }}
+                    style={{ animation: "floatPrize 3.4s ease-in-out infinite" }}
                   />
                 ) : (
-                  <div className="text-6xl z-10" style={{ animation: "floatPrize 3.8s ease-in-out infinite" }}>🎁</div>
+                  <div className="text-6xl z-10" style={{ animation: "floatPrize 3.4s ease-in-out infinite" }}>🎁</div>
                 )
               }
             />
+
+            {/* Prize 3: Faras Game Cash Reward */}
+            <PrizeCard
+              label="🃏 Third Prize"
+              badgeClass="bg-gradient-to-r from-purple-700 to-indigo-600"
+              prize={prize3}
+              borderColor="border-purple-400/60"
+              slot="cash"
+              imageSlot={
+                <div
+                  className="relative z-10 w-full h-full flex items-center justify-center transition-transform duration-300 group-hover:scale-105"
+                  style={{ animation: "floatPrize 3.8s ease-in-out infinite" }}
+                >
+                  {hasCash ? renderCashRewardImage() : <div className="text-6xl z-10">😊</div>}
+                </div>
+              }
+            />
+
+
           </div>
 
           {/* ── STORE INFO STRIP ── */}
-          <div className="mt-2 p-3 sm:p-4 rounded-2xl bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-500/20 border-2 border-amber-400/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+          {/* <div className="mt-2 p-3 sm:p-4 rounded-2xl bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-500/20 border-2 border-amber-400/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center font-black shrink-0 shadow-lg">
                 <Trophy className="w-6 h-6 text-slate-900" />
               </div>
               <div>
                 <div className="text-xs font-black uppercase tracking-wider text-amber-300">
-                  दशैं तथा तिहार उपहार दाबी (Claim at Store)
+                  Claim Your Prizes at Store
                 </div>
                 <div className="text-xs sm:text-sm text-slate-200 font-semibold flex items-center gap-1.5 flex-wrap">
                   <MapPin className="w-3.5 h-3.5 text-red-400 shrink-0" />
@@ -416,10 +412,10 @@ export default function GrandDoubleWinnerModal({
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-5 h-5 text-emerald-400" />
               <span className="text-xs font-black text-emerald-300">
-                सबै उपहारहरू सुरक्षित गरियो (All Prizes Recorded)
+                All Prizes Recorded Successfully
               </span>
             </div>
-          </div>
+          </div> */}
 
           {/* ── ACTION BUTTONS ── */}
           <div className="flex flex-col sm:flex-row gap-3 mt-4">
@@ -428,7 +424,7 @@ export default function GrandDoubleWinnerModal({
               className="flex-1 py-3.5 px-5 rounded-2xl font-black text-sm sm:text-base text-white tracking-wide shadow-xl transition-all active:scale-95 cursor-pointer relative overflow-hidden group bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-600 hover:from-emerald-500 hover:to-teal-400 border border-white/20 flex items-center justify-center gap-2"
             >
               <Gift className="w-5 h-5 text-amber-200" />
-              <span>उपहार सुरक्षित गर्नुहोस् (Done &amp; Save)</span>
+              <span>Close &amp; Save</span>
             </button>
 
             <button
@@ -436,7 +432,7 @@ export default function GrandDoubleWinnerModal({
               className="flex-1 py-3.5 px-5 rounded-2xl font-black text-sm sm:text-base text-white tracking-wide shadow-xl transition-all active:scale-95 cursor-pointer relative overflow-hidden group bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 hover:from-red-500 hover:to-amber-400 border border-white/30 flex items-center justify-center gap-2"
             >
               <RotateCcw className="w-5 h-5 text-amber-200 group-hover:-rotate-90 transition-transform duration-300" />
-              <span>अर्को नयाँ ग्राहकको खेल (New Customer Spin)</span>
+              <span>Restart New Game</span>
             </button>
           </div>
         </div>

@@ -18,15 +18,18 @@ const FerrisWheel = forwardRef(function FerrisWheel(
   // Wheel geometry scaled up to fill screen with massive cabins
   const cx = 540;
   const cy = 475;
-  const outerRadius = 390;
-  const innerRadius = 295;
+  const outerRadius = 450;
+  const innerRadius = 340;
 
   // 10 spokes for 10 cabins (36 deg intervals)
   const r4 = (n) => Math.round(n * 10000) / 10000;
 
+  const numItems = prizes.length > 0 ? prizes.length : 10;
+  const anglePerItem = 360 / numItems;
+
   const spokes = useMemo(() => {
-    return Array.from({ length: 10 }).map((_, i) => {
-      const angleDeg = i * 36; // 0 is top (12 o'clock), 180 is bottom (6 o'clock)
+    return Array.from({ length: numItems }).map((_, i) => {
+      const angleDeg = i * anglePerItem; // 0 is top (12 o'clock), 180 is bottom (6 o'clock)
       const rad = (angleDeg * Math.PI) / 180;
       const xOuter = r4(cx + outerRadius * Math.sin(rad));
       const yOuter = r4(cy - outerRadius * Math.cos(rad));
@@ -34,12 +37,12 @@ const FerrisWheel = forwardRef(function FerrisWheel(
       const yInner = r4(cy - innerRadius * Math.cos(rad));
       return { index: i, angleDeg, xOuter, yOuter, xInner, yInner };
     });
-  }, [cx, cy, outerRadius, innerRadius]);
+  }, [cx, cy, outerRadius, innerRadius, numItems, anglePerItem]);
 
   // Structural trusses between concentric rims
   const trusses = useMemo(() => {
     return spokes.map((spoke, i) => {
-      const nextSpoke = spokes[(i + 1) % 10];
+      const nextSpoke = spokes[(i + 1) % numItems];
       return {
         id: i,
         x1: spoke.xInner,
@@ -57,7 +60,7 @@ const FerrisWheel = forwardRef(function FerrisWheel(
         if (wheelGroupRef.current) {
           wheelGroupRef.current.setAttribute("transform", `rotate(${rot}, ${cx}, ${cy})`);
         }
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < numItems; i++) {
           const cabin = cabinRefs.current[i];
           if (cabin) {
             const spoke = spokes[i];
@@ -359,44 +362,44 @@ const FerrisWheel = forwardRef(function FerrisWheel(
               >
                 {/* Heavy Steel Hanger Bracket */}
                 <path
-                  d="M 0 -8 L -18 18 L 18 18 Z"
+                  d="M 0 -10 L -20 20 L 20 20 Z"
                   fill="none"
                   stroke="#1e3a8a"
-                  strokeWidth="5"
+                  strokeWidth="6"
                   strokeLinejoin="round"
                 />
-                <circle cx="0" cy="-6" r="5" fill="#facc15" stroke="#ca8a04" strokeWidth="2" />
+                <circle cx="0" cy="-8" r="6" fill="#facc15" stroke="#ca8a04" strokeWidth="2" />
 
-                {/* Cabin Outer Shell - Extra Large (144x124) */}
+                {/* Cabin Outer Shell - Extra Large (166x142) */}
                 <rect
-                  x="-72"
-                  y="16"
-                  width="144"
-                  height="124"
-                  rx="26"
+                  x="-83"
+                  y="18"
+                  width="166"
+                  height="142"
+                  rx="30"
                   fill={prize.cabinColor || "#ef4444"}
                   stroke={isWinnerCabin ? "#facc15" : (prize.borderColor || "#0f172a")}
-                  strokeWidth={isWinnerCabin ? "6" : "3.5"}
+                  strokeWidth={isWinnerCabin ? "7" : "4.5"}
                 />
 
                 {/* Top Roof Accent Strip */}
-                <rect x="-52" y="21" width="104" height="5" rx="2.5" fill="#ffffff" opacity="0.55" />
+                <rect x="-60" y="24" width="120" height="6" rx="3" fill="#ffffff" opacity="0.55" />
 
-                {/* Large Bright Viewing Window (128x100) */}
+                {/* Large Bright Viewing Window */}
                 <rect
-                  x="-64"
-                  y="28"
-                  width="128"
-                  height="100"
-                  rx="20"
+                  x="-74"
+                  y="32"
+                  width="148"
+                  height="114"
+                  rx="24"
                   fill="#ffffff"
                   stroke="#cbd5e1"
-                  strokeWidth="2.5"
+                  strokeWidth="3"
                 />
 
-                {/* Massive Product Image (116px x 92px) - Clearly visible from across the room! */}
+                {/* Massive Product Image */}
                 {prize.img && (
-                  <foreignObject x="-58" y="30" width="116" height="92">
+                  <foreignObject x="-68" y="34" width="136" height="106">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={prize.img}
@@ -406,7 +409,7 @@ const FerrisWheel = forwardRef(function FerrisWheel(
                         height: "100%",
                         objectFit: "contain",
                         display: "block",
-                        filter: "drop-shadow(0 3px 6px rgba(0,0,0,0.18))",
+                        filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.2))",
                       }}
                       referrerPolicy="no-referrer"
                       crossOrigin="anonymous"
@@ -418,20 +421,20 @@ const FerrisWheel = forwardRef(function FerrisWheel(
 
                 {/* High-Contrast Bold Prize Name Label */}
                 <rect
-                  x="-64"
-                  y="114"
-                  width="128"
-                  height="24"
-                  rx="12"
+                  x="-83"
+                  y="124"
+                  width="166"
+                  height="36"
+                  rx="14"
                   fill="#0f172a"
                   opacity="0.95"
                 />
                 <text
                   x="0"
-                  y="130"
+                  y="148"
                   textAnchor="middle"
                   fill="#ffffff"
-                  fontSize="12"
+                  fontSize={prize?.id?.startsWith("cash-") ? "24" : "16"}
                   fontWeight="900"
                   style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
                 >
@@ -441,14 +444,14 @@ const FerrisWheel = forwardRef(function FerrisWheel(
                 {/* Pulsing Highlight if Winner */}
                 {isWinnerCabin && (
                   <rect
-                    x="-80"
+                    x="-92"
                     y="10"
-                    width="160"
-                    height="138"
-                    rx="30"
+                    width="184"
+                    height="160"
+                    rx="34"
                     fill="none"
                     stroke="#fbbf24"
-                    strokeWidth="6"
+                    strokeWidth="7"
                     filter="url(#goldGlow)"
                     className="animate-pulse"
                   />
