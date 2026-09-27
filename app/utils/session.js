@@ -46,3 +46,18 @@ export function clearCustomerSession() {
     console.error("Error clearing session:", err);
   }
 }
+
+/**
+ * Save current session to winners history
+ */
+export function saveToWinnersHistory(sessionData) {
+  if (typeof window === "undefined" || !sessionData) return;
+  try {
+    const history = JSON.parse(localStorage.getItem("alamtech_winners_history") || "[]");
+    history.push({ ...sessionData, completedAt: Date.now() });
+    localStorage.setItem("alamtech_winners_history", JSON.stringify(history));
+  } catch (err) {
+    console.error("Error saving winner history:", err);
+  }
+}
+
